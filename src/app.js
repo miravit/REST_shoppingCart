@@ -23,6 +23,7 @@ app.use((req, res, next) => {
 
 //skapa routern
 app.use("/api/v1/Cart", cartRoutes);
+app.use("/api/v1/Product", productRoutes);
 
 //post route middleware // om jag inte lägger till en endpoint i end.use så blir det 404. Länkar in views
 app.use((req, res) => {
