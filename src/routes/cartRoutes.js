@@ -7,13 +7,10 @@ const {
 
 const router = express.Router(); //wrappar hela funktionen i en try catch så jag slipper görade t i mina controllers
 
-router.get("/:cartId", getCartById);
-
-/////////////////////////////////
 router.post("/", createNewCart);
+router.get("/:cartId", getCartById);
+router.delete("/:cartId", deleteCart);
 
 // router.put('/:projectId', updateTodoById)
-
-router.delete("/:cartId", deleteCart);
 
 module.exports = router;

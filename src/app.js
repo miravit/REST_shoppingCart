@@ -22,8 +22,8 @@ app.use((req, res, next) => {
 //CRUD projects // vi måste ha en route per sak vi vill göra. så en för get, post, put, delete
 
 //skapa routern
-app.use("/api/v1/Cart", cartRoutes);
-app.use("/api/v1/Product", productRoutes);
+app.use("/api/v1/cart", cartRoutes);
+app.use("/api/v1/product", productRoutes);
 
 //post route middleware // om jag inte lägger till en endpoint i end.use så blir det 404. Länkar in views
 app.use((req, res) => {
