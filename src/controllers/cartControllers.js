@@ -1,9 +1,5 @@
 const Cart = require("../models/Cart");
 
-exports.getCartById = async (req, res, next) => {
-  res.send("hej");
-};
-
 exports.createNewCart = async (req, res, next) => {
   const totalAmount = req.body.totalAmount;
 
@@ -16,6 +12,24 @@ exports.createNewCart = async (req, res, next) => {
     .json(newCart);
 };
 
+exports.getCartById = async (req, res, next) => {
+  const cartId = req.params.cartId;
+
+  const cart = await Cart.findById(cartId);
+
+  if (!cart) return res.sendStatus(404);
+
+  res.json(cart);
+};
+
 exports.deleteCart = async (req, res, next) => {
-  res.send("ta bort");
+  const cartId = req.params.cartId;
+
+  const cartToDelete = await Cart.findById(cartId);
+
+  if (!cartToDelete) return res.sendStatus(404);
+
+  const response = await cartToDelete.delete();
+
+  return res.send("deleting");
 };
