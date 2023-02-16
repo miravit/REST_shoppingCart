@@ -9,9 +9,7 @@ const router = express.Router(); //wrappar hela funktionen i en try catch så ja
 
 router.get("/", getAllProducts);
 router.get("/:productId", getProductById);
-
 router.post("/:productId", addProductToCart);
-
 router.delete("/:projectId", deleteProductFromCart);
 
 module.exports = router;
