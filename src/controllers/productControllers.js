@@ -19,23 +19,25 @@ exports.getProductById = async (req, res, next) => {
 
 exports.addProductToCart = async (req, res) => {
   try {
-    const id = req.body.id;
     const productId = req.params.productId;
-    //borde hämta in namnet och priset här för annars kna jag ju inte pusha det in i listan??
-    const cartList = await Cart.findById(id);
-    const productItem = await Product.findById(productId);
-    console.log(productItem);
+    const cartId = req.body.cartId;
+
+    const cart = await Cart.findById(cartId);
+    const products = await Product.findById(productId);
+    console.log(cart);
     //pushar mitt object till min Cart.
 
-    cartList.cart.push({
-      product: productItem,
-    });
+    cart.products.push(products);
 
-    cartList.totalAmount += productItem.price;
+    console.log("--------");
+    console.log(products);
+    console.log("--------");
 
-    await cartList.save();
+    cart.totalAmount += products.price;
 
-    return res.status(201).json(productItem);
+    await cart.save();
+
+    return res.status(201).json(products);
   } catch (error) {
     console.error(error);
 
