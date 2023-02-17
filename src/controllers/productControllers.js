@@ -18,33 +18,22 @@ exports.getProductById = async (req, res, next) => {
 };
 
 exports.addProductToCart = async (req, res) => {
-  try {
-    const productId = req.params.productId;
-    const cartId = req.body.cartId;
+  const productId = req.params.productId;
+  const cartId = req.body.cartId;
 
-    const cart = await Cart.findById(cartId);
-    const products = await Product.findById(productId);
-    console.log(cart);
-    //pushar mitt object till min Cart.
+  const products = await Product.findById(productId);
+  const cart = await Cart.findById(cartId);
 
-    cart.products.push(products);
+  console.log(products);
+  cart.products.push(products);
 
-    console.log("--------");
-    console.log(products);
-    console.log("--------");
+  cart.totalAmount += products.price;
 
-    cart.totalAmount += products.price;
+  await cart.save();
 
-    await cart.save();
+  //   return res.send(cart);
 
-    return res.status(201).json(products);
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      message: error.message,
-    });
-  }
+  return res.status(200).json(cart);
 };
 
 exports.deleteProductFromCart = async (req, res, next) => {
