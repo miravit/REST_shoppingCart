@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 const Cart = require("../models/Cart");
+const { NotFoundError } = require("../utils/errors");
 
 exports.getAllProducts = async (req, res, next) => {
   const products = await Product.find();
@@ -24,16 +25,25 @@ exports.addProductToCart = async (req, res) => {
   const products = await Product.findById(productId);
   const cart = await Cart.findById(cartId);
 
-  console.log(products);
-  cart.products.push(products);
+  if (!products) {
+    throw new NotFoundError("This product does not exist");
+  }
 
-  cart.totalAmount += products.price;
+  if (!cart) {
+    throw new NotFoundError("This cart does not exist");
+  }
 
-  await cart.save();
-
-  //   return res.send(cart);
-
-  return res.status(200).json(cart);
+  for (let i = 0; i < cart.products.length; i++) {
+    if (cart.products[i]._id == productId) {
+      // console.log(cart.products[i].quantity);
+      cart.products[i].quantity++;
+      await cart.save();
+      return res.status(201).json(cart);
+    } else {
+      cart.products.push(products); //ddenna else gör att allt pushas in 3 gånger
+      await cart.save();
+    }
+  }
 };
 
 exports.deleteProductFromCart = async (req, res, next) => {
