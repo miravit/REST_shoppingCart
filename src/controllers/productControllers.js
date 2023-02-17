@@ -17,19 +17,32 @@ exports.getProductById = async (req, res, next) => {
   return res.status(200).json(product);
 };
 
-exports.addProductToCart = async (req, res, next) => {
-  const productId = req.params.productId; //mitt productID jag skriver in i URI
-  const id = req.body.id; //min cart ID jag skriver som JSON i bodyn
-  const cart = await Cart.findById(id); //hitta cartID
-  const product = await Product.findById(productId);
+exports.addProductToCart = async (req, res) => {
+  try {
+    const id = req.body.id;
+    const productId = req.params.productId;
+    //borde hämta in namnet och priset här för annars kna jag ju inte pusha det in i listan??
+    const cartList = await Cart.findById(id);
+    const productItem = await Product.findById(productId);
+    console.log(productItem);
+    //pushar mitt object till min Cart.
 
-  cart.cart.push({
-    product: productId,
-  });
+    cartList.cart.push({
+      product: productItem,
+    });
 
-  await cart.save();
+    cartList.totalAmount += productItem.price;
 
-  console.log(product); // { _id: new ObjectId("63ecf73ddf52f146e4c2a15e"), cart: [], __v: 0 }
+    await cartList.save();
+
+    return res.status(201).json(productItem);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 exports.deleteProductFromCart = async (req, res, next) => {
