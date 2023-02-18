@@ -32,20 +32,19 @@ exports.addProductToCart = async (req, res) => {
   if (!cart) {
     throw new NotFoundError("This cart does not exist");
   }
+  //console.log(cart);
 
   for (let i = 0; i < cart.products.length; i++) {
     if (cart.products[i]._id == productId) {
-      // console.log(cart.products[i].quantity);
       cart.products[i].quantity++;
       await cart.save();
       return res.status(201).json(cart);
-    } else {
-      cart.products.push(products); //ddenna else gör att allt pushas in 3 gånger
-      await cart.save();
     }
   }
+  cart.products.push(products);
+  await cart.save();
+  return res.status(200).json(cart);
 };
-
 exports.deleteProductFromCart = async (req, res, next) => {
   res.send("hola ta bort");
 };
