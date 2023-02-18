@@ -26,15 +26,6 @@ exports.addProductToCart = async (req, res) => {
   const products = await Product.findById(productId);
   const cart = await Cart.findById(cartId);
 
-  // if (!products) {
-  //   throw new NotFoundError("This product does not exist");
-  // }
-
-  // if (!cart) {
-  //   throw new NotFoundError("This cart does not exist");
-  // }
-  //console.log(cart);
-
   for (let i = 0; i < cart.products.length; i++) {
     if (cart.products[i]._id == productId) {
       cart.products[i].quantity++;
@@ -52,34 +43,22 @@ exports.addProductToCart = async (req, res) => {
 exports.deleteProductFromCart = async (req, res, next) => {
   const productId = req.params.productId;
   const cartId = req.body.cartId;
-
-  const product = await Product.findById(productId);
   const cart = await Cart.findById(cartId);
+  const products = await Product.findById(productId);
 
-  // if (!product) {
-  //   throw new NotFoundError("This product does not exist");
-  // }
-
-  // if (!cart) {
-  //   throw new NotFoundError("This cart does not exist");
-  // }
-  //console.log(cart);
-
-  // for (let i = 0; i < cart.product.length; i++) {
-  //   if (cart.products[i].quantity == 1 && cart.product[i]._id == productId) {
-  //     console.log("tjena");
-  //     // cart.products[i].quantity--;
-  //     // await cart.save();
-  //     return res.status(201).json(cart);
-  //   }
   for (let i = 0; i < cart.products.length; i++) {
     if (cart.products[i]._id == productId) {
-      console.log("tjena");
-      // cart.products[i].quantity--;
-      // await cart.save();
-      // return res.status(200).json(cart);
+      cart.products[i].quantity--;
+      console.log("hej");
+
+      await cart.save();
+      return res.status(201).json(cart);
     }
   }
+  cart.totalAmount -= products.price;
   await cart.save();
   return res.status(200).json(cart);
 };
+
+///////änddra så den 0=remove
+/////fixa totalsumman
