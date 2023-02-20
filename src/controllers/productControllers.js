@@ -49,6 +49,7 @@ exports.deleteProductFromCart = async (req, res, next) => {
   for (let i = 0; i < cart.products.length; i++) {
     if (cart.products[i]._id == productId) {
       cart.products[i].quantity--;
+      cart.totalAmount -= cart.products[i].price;
       console.log("hej");
 
       await cart.save();
