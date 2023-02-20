@@ -5,7 +5,7 @@ const {
   addProductToCart,
   deleteProductFromCart,
 } = require("../controllers/productControllers");
-const router = express.Router(); //wrappar hela funktionen i en try catch så jag slipper görade t i mina controllers
+const router = express.Router();
 
 router.get("/", getAllProducts);
 router.get("/:productId", getProductById);

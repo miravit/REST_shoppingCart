@@ -1,7 +1,5 @@
 const Product = require("../models/Product");
 const Cart = require("../models/Cart");
-const { NotFoundError } = require("../utils/errors");
-const { CanceledError } = require("axios");
 
 exports.getAllProducts = async (req, res, next) => {
   const products = await Product.find();
@@ -53,13 +51,16 @@ exports.deleteProductFromCart = async (req, res, next) => {
       console.log("hej");
 
       await cart.save();
-      return res.status(201).json(cart);
+
+      if (cart.products[i].quantity < 1) {
+        cart.products.splice([i], 1);
+
+        await cart.save();
+      }
+      return res.status(204).json(cart);
     }
   }
   cart.totalAmount -= products.price;
   await cart.save();
   return res.status(200).json(cart);
 };
-
-///////änddra så den 0=remove
-/////fixa totalsumman

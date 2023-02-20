@@ -19,7 +19,7 @@ exports.getCartById = async (req, res, next) => {
 
   if (!cart) return res.sendStatus(404);
 
-  res.json(cart);
+  return res.status(200).json(cart);
 };
 
 exports.deleteCart = async (req, res, next) => {
@@ -31,5 +31,5 @@ exports.deleteCart = async (req, res, next) => {
 
   const response = await cartToDelete.delete();
 
-  return res.send("deleting");
+  return res.send("deleted").status(204);
 };
